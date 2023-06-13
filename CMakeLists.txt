@@ -10,7 +10,10 @@ set(BOOST_SRC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/test.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/io_service_test.cpp
-)
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/work_def.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/session.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/log.cpp
+    )
 message("BOOST_SRC is ${BOOST_SRC}------------------------->")
 
 set(BOOST_INCLUDE 

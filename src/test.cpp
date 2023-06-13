@@ -1,4 +1,4 @@
-#include "test.h"
+#include "../include/test.h"
 std::string test::hello() {
     return "hello";
 }
