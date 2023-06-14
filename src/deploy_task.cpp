@@ -4,11 +4,13 @@
 #include <condition_variable>
 #include "log.h"
 #include <iostream>
+#include <boost/bind.hpp>
 
 int count = 0;
 std::mutex lock_;
 std::condition_variable condition_;
 bool is_work = true;
+std::shared_ptr<boost::asio::io_service> io_;
 
 void awake()
 {
@@ -38,9 +40,11 @@ void work(std::string name)
     }
 }
 
-void deploy::deploy_task::callback(std::string name)
+void deploy::deploy_task::callback(std::string name, boost::asio::io_service *ioService)
 {
     log("callback is running---------->");
+    // io_.reset(ioService);
+    // io_.get()->post(boost::bind(&deploy::deploy_task::start, this, name));
     start(name);
 }
 
@@ -49,12 +53,15 @@ void deploy::deploy_task::start(std::string name)
     log("start is running---------->");
     std::thread good(work, name);
     good.detach();
+    // io_.get()->post(boost::bind(&work, name));
+    // std::this_thread::sleep_for(std::chrono::seconds(3));
     std::thread threads[10];
     for (int i = 0; i < 2; i++)
     {
         threads[i] = std::thread(awake);
-        std::this_thread::sleep_for(std::chrono::seconds(3));
         threads[i].detach();
+        // io_.get()->post(boost::bind(&awake));
+        std::this_thread::sleep_for(std::chrono::seconds(3));
     }
 }
 

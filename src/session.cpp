@@ -9,12 +9,8 @@
 
 bool g_main_thread_run = 1;
 std::shared_ptr<std::thread> m_thread;
-std::vector<boost::function<void(std::string)>> methods;
-
-void work_callback(int index, std::string name)
-{
-    methods[index](name);
-}
+std::vector<boost::function<void(std::string, boost::asio::io_service *)>> methods;
+std::shared_ptr<boost::asio::io_service> io;
 
 void session::main_thread()
 {
@@ -28,22 +24,20 @@ void session::main_thread()
             char name[64];
             sprintf(name, "hello %d", i);
             log("methods is gooooooo------------>");
-            // std::thread t(work_callback, i, "fuck you");
-            // t.join();
             std::string msg = "fuck you" + std::to_string(i);
-            methods[i](msg);
+            methods[i](msg, io.get());
         }
     }
 }
 
-void session::init()
+void session::init(boost::asio::io_service *ioContext)
 {
+    io.reset(ioContext);
     deploy::deploy_task task;
-    regiest_handle(boost::bind(&deploy::deploy_task::callback, task, _1));
-    disk::disk_test disk_test;
-    regiest_handle(boost::bind(&disk::disk_test::call_back, disk_test, _1));
-    m_thread.reset(new std::thread(main_thread));
-    m_thread->detach();
+    regiest_handle(boost::bind(&deploy::deploy_task::callback, task, _1, _2));
+    // disk::disk_test disk_test;
+    // regiest_handle(boost::bind(&disk::disk_test::call_back, disk_test, _1));
+    io.get()->post(boost::bind(&session::main_thread));
 }
 
 void session::stop()
@@ -51,7 +45,7 @@ void session::stop()
     g_main_thread_run = 0;
 }
 
-void session::regiest_handle(boost::function<void(std::string)> f)
+void session::regiest_handle(boost::function<void(std::string, boost::asio::io_service *)> f)
 {
     methods.push_back(f);
 }

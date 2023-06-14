@@ -1,12 +1,14 @@
 #ifndef DEPLOY_TASK_HEAD
 #define DEPLOY_TASK_HEAD
 #include <string>
+#include <boost/asio/io_service.hpp>
+
 namespace deploy
 {
     class deploy_task
     {
     public:
-        void callback(std::string name);
+        void callback(std::string name, boost::asio::io_service *ioService);
 
         void start(std::string name);
 
