@@ -5,6 +5,7 @@
 #include "deploy_task.h"
 #include <boost/bind.hpp>
 #include <boost/function.hpp>
+#include "disk_util.h"
 
 bool g_main_thread_run = 1;
 std::shared_ptr<std::thread> m_thread;
@@ -39,8 +40,10 @@ void session::init()
 {
     deploy::deploy_task task;
     regiest_handle(boost::bind(&deploy::deploy_task::callback, task, _1));
+    disk::disk_test disk_test;
+    regiest_handle(boost::bind(&disk::disk_test::call_back, disk_test, _1));
     m_thread.reset(new std::thread(main_thread));
-    // m_thread->join();
+    m_thread->detach();
 }
 
 void session::stop()

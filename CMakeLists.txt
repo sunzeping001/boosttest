@@ -14,6 +14,7 @@ set(BOOST_SRC
     ${CMAKE_CURRENT_SOURCE_DIR}/src/session.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/log.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/src/deploy_task.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/utils/disk_util.cpp
 )
 message("BOOST_SRC is ${BOOST_SRC}------------------------->")
 

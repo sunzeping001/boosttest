@@ -1,6 +1,7 @@
 #include "session.h"
 #include <thread>
 #include <iostream>
+#include "log.h"
 
 using namespace std;
 
@@ -11,14 +12,14 @@ int main()
         session::init();
         while (true)
         {
-            std::cout << "main loop------------->" << std::endl;
+            log("main loop------------->");
             sleep(2);
         }
-        cout << "finished" << endl;
+        log("finished");
     }
     catch (const std::exception &e)
     {
-        std::cerr << e.what() << '\n';
+        std::cout << "main exception---->" << e.what() << std::endl;
     }
     return 0;
 }

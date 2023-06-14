@@ -48,12 +48,13 @@ void deploy::deploy_task::start(std::string name)
 {
     log("start is running---------->");
     std::thread good(work, name);
+    good.detach();
     std::thread threads[10];
     for (int i = 0; i < 2; i++)
     {
         threads[i] = std::thread(awake);
-        std::this_thread::sleep_for(std::chrono::seconds(1));
-        // threads[i].join();
+        std::this_thread::sleep_for(std::chrono::seconds(3));
+        threads[i].detach();
     }
 }
 
