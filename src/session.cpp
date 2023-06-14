@@ -35,8 +35,8 @@ void session::init(boost::asio::io_service *ioContext)
     io.reset(ioContext);
     deploy::deploy_task task;
     regiest_handle(boost::bind(&deploy::deploy_task::callback, task, _1, _2));
-    // disk::disk_test disk_test;
-    // regiest_handle(boost::bind(&disk::disk_test::call_back, disk_test, _1));
+    disk::disk_test disk_test;
+    regiest_handle(boost::bind(&disk::disk_test::call_back, disk_test, _1));
     io.get()->post(boost::bind(&session::main_thread));
 }
 
