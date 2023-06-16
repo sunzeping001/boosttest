@@ -30,7 +30,7 @@ int disk::disk_test::get_disk_info()
     return 0;
 }
 
-void disk::disk_test::call_back(std::string name)
+void disk::disk_test::call_back(std::string name, boost::asio::io_service *ioService)
 {
     get_disk_info();
 }

@@ -6,6 +6,8 @@
 #include <iostream>
 #include <boost/bind.hpp>
 
+#define PRINT_NUM 10
+
 int count = 0;
 std::mutex lock_;
 std::condition_variable condition_;
@@ -31,7 +33,7 @@ void work(std::string name)
         sprintf(content, "work %s is working----------->", name.c_str());
         log(content);
         count++;
-        if (count == 2)
+        if (count == PRINT_NUM)
         {
             is_work = false;
             std::cout << "is_work is " << is_work << std::endl;
@@ -55,8 +57,8 @@ void deploy::deploy_task::start(std::string name)
     good.detach();
     // io_.get()->post(boost::bind(&work, name));
     // std::this_thread::sleep_for(std::chrono::seconds(3));
-    std::thread threads[10];
-    for (int i = 0; i < 2; i++)
+    std::thread threads[PRINT_NUM];
+    for (int i = 0; i < PRINT_NUM; i++)
     {
         threads[i] = std::thread(awake);
         threads[i].detach();

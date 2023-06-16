@@ -5,10 +5,28 @@
 #include <boost/asio/io_service.hpp>
 #include <boost/bind.hpp>
 #include "work_def.h"
+#include <execinfo.h>
+#include <unistd.h>
+#include <signal.h>
 
 using namespace std;
 
 boost::asio::io_service io_service;
+
+void signal_handler(int sig)
+{
+    void *array[10];
+    size_t size;
+    size = backtrace(array, 10);
+    FILE *fp = fopen("../crash.log", "a");
+    if (fp != NULL)
+    {
+        fprintf(fp, "Error: signal %d\n", sig);
+        backtrace_symbols_fd(array, size, fileno(fp));
+        fclose(fp);
+    }
+    exit(1); // exit the program
+}
 
 void work_thread()
 {
@@ -33,6 +51,7 @@ void work_thread()
 
 int main()
 {
+    signal(SIGSEGV, signal_handler);
     thread wt(work_thread);
     wt.join();
     return 0;
