@@ -2,7 +2,7 @@
 #define DISK_UTIL_H
 #include <string>
 #include "log.h"
-#include <sys/statfs.h>
+// #include <sys/statfs.h>
 #include <boost/asio/io_service.hpp>
 
 namespace disk
